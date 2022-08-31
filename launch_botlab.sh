@@ -9,7 +9,7 @@ help()
 
 TIMESTAMP=$(date "+%y%m%d_%H%M%S")  # For log files.
 ROOT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
-LOG_DIR="/home/$USER/.logs"
+LOG_DIR="/home/pi/.logs"
 MAP_FILE="$ROOT_DIR/maps/current.map"  # Default map file.
 PARTICLE_COUNT=200
 
