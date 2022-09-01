@@ -23,22 +23,22 @@ echo "Cleaning up any running MBot code."
 sudo $ROOT_DIR/cleanup_botlab.sh
 
 echo "Launching timesync"
-$ROOT_DIR/bin/timesync &> $LOG_DIR/timesync_$TIMESTAMP.log &
+$ROOT_DIR/bin/timesync &> /dev/null &
 echo "Launching Lidar driver"
-$ROOT_DIR/bin/rplidar_driver &> $LOG_DIR/rplidar_driver_$TIMESTAMP.log &
+$ROOT_DIR/bin/rplidar_driver &> /dev/null &
 echo "Launching motion planning server"
-$ROOT_DIR/bin/motion_planning_server &> $LOG_DIR/motion_planning_server_$TIMESTAMP.log &
+$ROOT_DIR/bin/motion_planning_server &> /dev/null &
 echo "Launching pico shim"
-$ROOT_DIR/bin/omni_shim &> $LOG_DIR/omni_shim_$TIMESTAMP.log &
+$ROOT_DIR/bin/omni_shim &> /dev/null &
 echo "Launching motion controller"
-$ROOT_DIR/bin/motion_controller &> $LOG_DIR/motion_controller_$TIMESTAMP.log &
+$ROOT_DIR/bin/motion_controller &> /dev/null &
 echo "Launching SLAM"
-$ROOT_DIR/bin/slam --num-particles $PARTICLE_COUNT &> $LOG_DIR/slam_$TIMESTAMP.log &
+$ROOT_DIR/bin/slam --num-particles $PARTICLE_COUNT &> /dev/null &
 
 # Create sim links to the log files.
-ln -sf $LOG_DIR/timesync_$TIMESTAMP.log $LOG_DIR/timesync_latest.log
-ln -sf $LOG_DIR/rplidar_driver_$TIMESTAMP.log $LOG_DIR/rplidar_driver_latest.log
-ln -sf $LOG_DIR/motion_controller_$TIMESTAMP.log $LOG_DIR/motion_controller_latest.log
-ln -sf $LOG_DIR/slam_$TIMESTAMP.log $LOG_DIR/slam_latest.log
-ln -sf $LOG_DIR/motion_planning_server_$TIMESTAMP.log $LOG_DIR/motion_planning_server_latest.log
-ln -sf $LOG_DIR/omni_shim_$TIMESTAMP.log $LOG_DIR/omni_shim_latest.log
+# ln -sf $LOG_DIR/timesync_$TIMESTAMP.log $LOG_DIR/timesync_latest.log
+# ln -sf $LOG_DIR/rplidar_driver_$TIMESTAMP.log $LOG_DIR/rplidar_driver_latest.log
+# ln -sf $LOG_DIR/motion_controller_$TIMESTAMP.log $LOG_DIR/motion_controller_latest.log
+# ln -sf $LOG_DIR/slam_$TIMESTAMP.log $LOG_DIR/slam_latest.log
+# ln -sf $LOG_DIR/motion_planning_server_$TIMESTAMP.log $LOG_DIR/motion_planning_server_latest.log
+# ln -sf $LOG_DIR/omni_shim_$TIMESTAMP.log $LOG_DIR/omni_shim_latest.log
