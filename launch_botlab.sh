@@ -12,9 +12,14 @@ help()
     echo "    -m [MAP_FILE] The map file to save in full SLAM mode, or to load if in localization mode."
 }
 
+MBOT_USER=pi 
+if [ ! -d /home/$MBOT_USER ]; then
+    MBOT_USER=$USER
+fi
+
 TIMESTAMP=$(date "+%y%m%d_%H%M%S")  # For log files.
 ROOT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
-LOG_DIR="/home/$USER/.logs"
+LOG_DIR="/home/$MBOT_USER/.logs"
 
 RUN_CONTROLLER=1
 IDLE_MODE=0
@@ -55,10 +60,11 @@ echo "Logging to: $LOG_DIR"
 echo "Cleaning up any running MBot code."
 $ROOT_DIR/cleanup_botlab.sh
 
-echo "Launching timesync and Lidar driver."
+echo "Launching timesync, shim, and Lidar driver."
 source $ROOT_DIR/setenv.sh
 $ROOT_DIR/bin/timesync &> $LOG_DIR/timesync_$TIMESTAMP.log &
 $ROOT_DIR/bin/rplidar_driver &> $LOG_DIR/rplidar_driver_$TIMESTAMP.log &
+$ROOT_DIR/bin/pico_shim &> $LOG_DIR/pico_shim_$TIMESTAMP.log &
 
 if [[ RUN_CONTROLLER -eq 1 ]]; then
     echo "Launching motion controller."
@@ -73,18 +79,17 @@ if [[ IDLE_MODE -eq 1 ]]; then
 elif [[ FULL_SLAM_MODE -eq 1 ]]; then
     echo "Launching SLAM in mapping mode (map will be saved in $MAP_FILE)."
     $ROOT_DIR/bin/slam --num-particles $PARTICLE_COUNT --map $MAP_FILE &> $LOG_DIR/slam_$TIMESTAMP.log &
-else
-    if [[ ! -f "$MAP_FILE" ]]; then
-        echo "Map $MAP_FILE does not exist."
-        exit
-    fi
+elif [[ -f "$MAP_FILE" ]]; then
     echo "Launching SLAM in localization only mode with map $MAP_FILE"
     $ROOT_DIR/bin/slam --num-particles $PARTICLE_COUNT --map $MAP_FILE --localization-only --random-initial-pos &> $LOG_DIR/slam_$TIMESTAMP.log &
+else
+    echo "Not launching SLAM. Invalid mode or $MAP_FILE does not exist."
 fi
 
 # Create sim links to the log files.
 ln -sf $LOG_DIR/timesync_$TIMESTAMP.log $LOG_DIR/timesync_latest.log
 ln -sf $LOG_DIR/rplidar_driver_$TIMESTAMP.log $LOG_DIR/rplidar_driver_latest.log
+ln -sf $LOG_DIR/pico_shim_$TIMESTAMP.log $LOG_DIR/pico_shim_latest.log
 ln -sf $LOG_DIR/motion_controller_$TIMESTAMP.log $LOG_DIR/motion_controller_latest.log
 ln -sf $LOG_DIR/slam_$TIMESTAMP.log $LOG_DIR/slam_latest.log
 
