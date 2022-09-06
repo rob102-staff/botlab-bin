@@ -13,6 +13,7 @@ from .oled_message_t import oled_message_t
 from .reset_odometry_t import reset_odometry_t
 from .mbot_wheel_ctrl_t import mbot_wheel_ctrl_t
 from .omni_motor_command_t import omni_motor_command_t
+from .omni_encoder_t import omni_encoder_t
 from .robot_path_t import robot_path_t
 from .mbot_encoder_t import mbot_encoder_t
 from .message_received_t import message_received_t
