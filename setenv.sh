@@ -10,4 +10,4 @@ echo "VX fonts location: {$VX_FONTS_DIR}"
 
 LCM_JAVA_FILE_LOCATION=$(find . -regex '.*lcm.*\.jar' | head -n 1)
 export CLASSPATH=$CLASSPATH:$PWD/$LCM_JAVA_FILE_LOCATION
-echo "Jar file location: {$VX_FONTS_DIR}"
+echo "Jar file location: {$LCM_JAVA_FILE_LOCATION}"
